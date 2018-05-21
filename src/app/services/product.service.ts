@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
+// Firebase
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 
-import { Product } from "../models/product";
+// Model
+import { Product } from '../models/product';
 
 @Injectable()
 export class ProductService {
@@ -12,11 +14,13 @@ export class ProductService {
 
   constructor(private firebase: AngularFireDatabase) { }
 
-  getProducts() {
-    return this.productList = this.firebase.list('products')
+  getProducts()
+  {
+    return this.productList = this.firebase.list('products');
   }
 
-  insertProduct(product: Product) {
+  insertProduct(product: Product)
+  {
     this.productList.push({
       name: product.name,
       category: product.category,
@@ -25,7 +29,8 @@ export class ProductService {
     });
   }
 
-  updateProduct(product: Product) {
+  updateProduct(product: Product)
+  {
     this.productList.update(product.$key, {
       name: product.name,
       category: product.category,
@@ -34,7 +39,8 @@ export class ProductService {
     });
   }
 
-  deleteProduct($key: string) {
+  deleteProduct($key: string)
+  {
     this.productList.remove($key);
   }
 }

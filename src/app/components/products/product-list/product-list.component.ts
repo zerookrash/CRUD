@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-//services
-import { ProductService } from "../../../services/product.service";
+// model
 import { Product } from '../../../models/product';
+
+// service
+import { ProductService } from '../../../services/product.service';
+
+// toastr
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-list',
@@ -10,13 +15,15 @@ import { Product } from '../../../models/product';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-
   productList: Product[];
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
-    this.productService.getProducts()
+    return this.productService.getProducts()
       .snapshotChanges()
       .subscribe(item => {
         this.productList = [];
@@ -26,6 +33,17 @@ export class ProductListComponent implements OnInit {
           this.productList.push(x as Product);
         });
       });
+  }
+
+  onEdit(product: Product) {
+    this.productService.selectedProduct = Object.assign({}, product);
+  }
+
+  onDelete($key: string) {
+    if(confirm('Are you sure you want to delete it?')) {
+      this.productService.deleteProduct($key);
+      this.toastr.warning('Deleted Successfully', 'Product Removed');
+    }
   }
 
 }
